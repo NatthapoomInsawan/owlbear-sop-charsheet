@@ -1,0 +1,12 @@
+{
+  "name": "SoP Charactersheet",
+  "version": "1.0.0",
+  "manifest_version": 1,
+  "action": {
+    "title": "SoP Charactersheet",
+    "icon": "/icon.svg",
+    "popover": "/",
+    "height": 600,
+    "width": 400
+  }
+}
