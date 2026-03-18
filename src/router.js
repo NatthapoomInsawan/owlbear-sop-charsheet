@@ -3,16 +3,21 @@ import Equipment from "./views/equipment";
 import SpecialTrait from "./views/specialTrait";
 import Spell from "./views/spell";
 
+import CharacterController from "./controllers/characterController";
+import EquipmentController from "./controllers/equipmentController";
+import SpecialTraitController from "./controllers/specialTraitController";
+import SpellController from "./controllers/spellController";
+
 export const route = url =>{
     history.pushState(null, null, url);
     findMatchView();
 };
 
 const routes = [
-    { path: "/", view: Character },
-    { path: "/equipment", view: Equipment},
-    { path: "/special-trait", view: SpecialTrait},
-    { path: "/spell", view: Spell},
+    { path: "/", view: Character, controller: CharacterController },
+    { path: "/equipment", view: Equipment, controller: EquipmentController },
+    { path: "/special-trait", view: SpecialTrait, controller: SpecialTraitController },
+    { path: "/spell", view: Spell, controller: SpellController },
 ];
 
 const findMatchView = async () =>{
@@ -31,8 +36,11 @@ const findMatchView = async () =>{
     }
 
     let view = new match.route.view();
-    document.querySelector("#content").innerHTML = await view.getHtml();
+    let controller = new match.route.controller();
 
+    document.querySelector("#content").innerHTML = await view.getHtml();
+    
+    controller.init();
 };
 
 window.addEventListener("popstate", findMatchView);

@@ -14,10 +14,10 @@ document.querySelector('#app').innerHTML =
   </div>
   <div class= "nav-menu">
     <nav>
-      <a href="/", data-link>character</a> |
-      <a href="/equipment", data-link>equipment</a> |
-      <a href="/special-trait", data-link>special trait</a> |
-      <a href="/spell", data-link>spell</a>
+      <a href="/" data-link>character</a> |
+      <a href="/equipment" data-link>equipment</a> |
+      <a href="/special-trait" data-link>special trait</a> |
+      <a href="/spell" data-link>spell</a>
     </nav>
   </div>
   <div id="content">
