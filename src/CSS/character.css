@@ -1,0 +1,39 @@
+.character-info {
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+/* ROW 1: Item 1 (60% width) */
+.character-info label:nth-child(1) {
+  flex: 1 1 calc(60% - 20px);
+}
+
+/* ROW 1: Item 2 (40% width) */
+.character-info label:nth-child(2) {
+  flex: 2 1 calc(40% - 20px);
+}
+
+/* Row 2: 3 columns (33.3% each) - Targets items 3, 4, and 5 */
+.character-info label:nth-child(n+3):nth-child(-n+5) {
+  flex: 1 1 calc(33.3% - 20px);
+}
+
+/* Row 3: Single column (100%) - Targets item 6 and beyond */
+.character-info label:nth-child(n+6) {
+  flex: 1 1 100%;
+}
+
+.character-info label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.character-info input {
+  width: 100%;       
+  box-sizing: border-box;
+  text-align: center;
+}
