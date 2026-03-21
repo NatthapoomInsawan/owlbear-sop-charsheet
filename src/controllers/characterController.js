@@ -11,7 +11,29 @@ export default class CharacterController extends AbstractController{
         document.addEventListener("input", (event) =>{
             const modelKey = event.target.dataset.character;
             if (modelKey && modelKey in CharacterData) {
+                let value = event.target.value;
+
+                if (event.target.type === "number") {
+                    value = parseInt(value) || "";
+                    value = Math.max(event.target.min, Math.min(event.target.max, value)); // Ensure value is between min and max
+                    event.target.value = value;
+                }
+
                 CharacterData[modelKey] = event.target.value;
+            }
+        });
+
+         document.addEventListener("focusout", (event) => {
+            const modelKey = event.target.dataset.character;
+            if (modelKey && modelKey in CharacterData) {
+                let value = event.target.value;
+                
+                if (event.target.hasAttribute("calc-field")) {
+                    value = this.calculateMathExpression(value);
+                    event.target.value = value; // Update the input with the calculated value
+                }
+
+                CharacterData[modelKey] = value;
             }
         });
     }
@@ -32,6 +54,19 @@ export default class CharacterController extends AbstractController{
                 input.value = dataObject[modelKey] || "";
             }
         });
+    }
+
+    calculateMathExpression(input) {
+        const isExpression = /^[0-9+\-*/().\s]+$/.test(input);
+        if (isExpression) {
+            try {
+                return Function(`return ${input}`)();
+            } catch (e) {
+                return 0;
+            }
+        } else {
+            return parseInt(input) || 0;
+        }
     }
 
 }

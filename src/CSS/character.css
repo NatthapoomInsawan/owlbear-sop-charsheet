@@ -37,3 +37,18 @@
   box-sizing: border-box;
   text-align: center;
 }
+
+.character-quick-access {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.character-attributes {
+  width: 100%;
+  display: grid;
+  justify-content: space-between;
+  gap: 10px;
+}
