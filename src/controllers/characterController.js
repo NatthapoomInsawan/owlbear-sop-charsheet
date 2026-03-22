@@ -1,5 +1,5 @@
 import AbstractController from "./abstractController";
-import CharacterData from "../models/characterData";
+import CharacterData,{getDerivedStats} from "../models/characterData";
 import {CHARACTER_CLASS, CHARACTER_SUBCLASS, CHARACTER_LINEAGE} from "../models/sopData";
 
 export default class CharacterController extends AbstractController{
@@ -15,11 +15,29 @@ export default class CharacterController extends AbstractController{
 
                 if (event.target.type === "number") {
                     value = parseInt(value) || "";
-                    value = Math.max(event.target.min, Math.min(event.target.max, value)); // Ensure value is between min and max
+
+                    const min = event.target.getAttribute("min");
+                    const max = event.target.getAttribute("max");
+
+                    if (min !== null) value = Math.max(Number(min), value);
+                    if (max !== null) value = Math.min(Number(max), value);
                     event.target.value = value;
                 }
 
                 CharacterData[modelKey] = event.target.value;
+
+                if (event.target.hasAttribute("character-attribute")) {
+                    let attributeKey = event.target.getAttribute("character-attribute");
+                    let derivedStats = getDerivedStats(attributeKey);
+                    derivedStats.forEach(derivedStat => {
+                        const derivedInput = document.querySelector(`[data-character="${derivedStat}"]`);
+                        if (derivedInput) {
+                            derivedInput.value = CharacterData[attributeKey];
+                            CharacterData[derivedStat] = CharacterData[attributeKey];
+                        }
+                    });
+
+                }
             }
         });
 
@@ -51,7 +69,8 @@ export default class CharacterController extends AbstractController{
         inputs.forEach(input => {
             const modelKey = input.dataset.character;
             if (modelKey in dataObject) {
-                input.value = dataObject[modelKey] || "";
+                const fallback = input.type === "number" ? 0 : "";
+                input.value = dataObject[modelKey] ?? fallback;
             }
         });
     }

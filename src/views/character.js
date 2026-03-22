@@ -19,15 +19,21 @@ export default class Character extends AbstractView{
             <label>LINEAGE <input placeholder = "lineage" data-character = "characterLineage" list = "character-lineage"></label>
             <label>AMBITION <input placeholder = "ambitions" data-character = "characterAmbition"></label>
         </div>
-        <div id = "character-quick-access">
+        <div class = "character-stats">
             <div class = "character-attributes">
                 <h3>ATTRIBUTES</h3>
-                <label>MIGHT <input type = "number" step = "1" min = "1" max = "4" placeholder = "might" data-character = "might"></label>
-                <label>TOUGHNESS <input type = "number" step = "1" min = "1" max = "4" placeholder = "toughness" data-character = "toughness"></label>
-                <label>AGILITY <input type = "number" step = "1" min = "1" max = "4" placeholder = "agility" data-character = "agility"></label>
-                <label>WILLPOWER <input type = "number" step = "1" min = "1" max = "4" placeholder = "willpower" data-character = "willpower"></label>
-                <label>INTELLIGENCE <input type = "number" step = "1" min = "1" max = "4" placeholder = "intelligence" data-character = "intelligence"></label>
-                <label>FATE <input type = "number" step = "1" min = "1" max = "4" placeholder = "fate" data-character = "fate"></label>
+                <label>MIGHT <input type = "number" step = "1" min = "1" max = "4" placeholder = "might" data-character = "might" character-attribute = "might"></label>
+                <label>TOUGHNESS <input type = "number" step = "1" min = "1" max = "4" placeholder = "toughness" data-character = "toughness" character-attribute = "toughness"></label>
+                <label>AGILITY <input type = "number" step = "1" min = "1" max = "4" placeholder = "agility" data-character = "agility" character-attribute = "agility"></label>
+                <label>WILLPOWER <input type = "number" step = "1" min = "1" max = "4" placeholder = "willpower" data-character = "willpower" character-attribute = "willpower"></label>
+                <label>INTELLIGENCE <input type = "number" step = "1" min = "1" max = "4" placeholder = "intelligence" data-character = "intelligence" character-attribute = "intelligence"></label>
+                <label>FATE <input type = "number" step = "1" min = "1" max = "4" placeholder = "fate" data-character = "fate" character-attribute = "fate"></label>
+            </div>
+            <div class = "character-derived-fields">
+                <label>GRIT <input type = "number" step = "1" min = "0" placeholder = "grit" data-character = "grit"></label>
+                <label>INIT <input type = "number" step = "1" min = "0" placeholder = "initiative" data-character = "initiative"></label>
+                <label>LUCK <input type = "number" step = "1" min = "0" placeholder = "luck" data-character = "luck"></label>
+                <label>ARMOR <input type = "number" step = "1" min = "0" placeholder = "armor" data-character = "armor"></label>
             </div>
         </div>
         `

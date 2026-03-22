@@ -14,6 +14,11 @@ let willpower = 0;
 let intelligence = 0;
 let fate = 0;
 
+let grit = toughness;
+let initiative = agility;
+let luck = fate;
+let armor = 0;
+
 export default { 
     playerName: playerName,
     characterName: characterName,
@@ -27,7 +32,22 @@ export default {
     agility: agility,
     willpower: willpower,
     intelligence: intelligence,
-    fate: fate
+    fate: fate,
+
+    grit: grit,
+    initiative: initiative,
+    luck: luck,
+    armor: armor
 
 };
+
+export function getDerivedStats(attributeName) {
+    const derivationStatKvp = {
+        toughness: ["grit"],
+        agility: ["initiative"],
+        fate: ["luck"],
+    };
+
+    return derivationStatKvp[attributeName] || [];
+}
 
