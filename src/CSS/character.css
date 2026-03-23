@@ -44,7 +44,8 @@
   grid-template-columns: repeat(2, 1fr);
   justify-content: space-between;
   gap: 10px;
-  padding: 20px 0;
+  padding-top: 2%;
+  align-items: center;
 }
 
 .character-attributes {
@@ -56,17 +57,20 @@
 
 
 .character-derived-fields {
-  width: 100%;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   grid-template-rows: repeat(2, 1fr);
+  padding-top: 5%;
   justify-content: center;
   gap: 10px;
+  
 }
 
 .character-derived-fields label {
   display: flex;
+  max-width: 200px;
   flex-direction: column;
+  aspect-ratio: 1 / 1;
   box-sizing: border-box;
   border: 3px solid white;
   gap: 4px;
