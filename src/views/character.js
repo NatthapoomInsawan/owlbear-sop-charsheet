@@ -2,6 +2,9 @@ import "../CSS/character.css";
 
 import AbstractView from "./AbstractView";
 
+import '../components/dragableItem.js';
+import '../components/dragableContainer.js';
+
 export default class Character extends AbstractView{
     constructor() {
         super();
@@ -35,6 +38,15 @@ export default class Character extends AbstractView{
                 <label>LUCK <input type = "number" step = "1" min = "0" placeholder = "luck" data-character = "luck"></label>
                 <label>ARMOR <input type = "number" step = "1" min = "0" placeholder = "armor" data-character = "armor"></label>
             </div>
+        </div>
+        <div class = "character-weapons">
+            <h3>WEAPONS</h3>
+            <dragable-container>
+                <draggable-item id="weapon-1">Weapon 1</draggable-item>
+                <draggable-item id="weapon-2">Weapon 2</draggable-item>
+                <draggable-item id="weapon-3">Weapon 3</draggable-item>
+            </dragable-container>
+            <button id = "add-weapon-btn">Add Weapon</button>
         </div>
         `
     }
