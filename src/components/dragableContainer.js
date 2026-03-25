@@ -18,15 +18,23 @@ class DragableContainer extends HTMLElement {
     this.shadowRoot.appendChild(template.content.cloneNode(true));
   }
 
-  connectedCallback() {
-    this.shadowRoot.innerHTML = template.innerHTML;
+  static get observedAttributes() {
+    return ['lock-child'];
+  }
 
+  connectedCallback() {
     this.addEventListener('dragover', (e) => {
       e.preventDefault();
       const draggingItem = document.querySelector('.dragging');
 
       if (!draggingItem) return;
       if (draggingItem.localName !== 'draggable-item') return;
+      
+      const isChildLocked = this.hasAttribute('lock-child');
+      const isForeigner = draggingItem.parentElement !== this;
+      const isDraggedFromLocked = draggingItem.parentElement.hasAttribute('lock-child');
+
+      if (isForeigner && (isChildLocked || isDraggedFromLocked)) return;
 
       const siblings = [...this.querySelectorAll('draggable-item:not(.dragging)')];
 
@@ -35,7 +43,9 @@ class DragableContainer extends HTMLElement {
         return e.clientY <= box.top + box.height / 2;
       });
 
-      this.insertBefore(draggingItem, nextSibling);
+      if (draggingItem.nextSibling !== nextSibling) {
+        this.insertBefore(draggingItem, nextSibling);
+      }
     });
   }
 }

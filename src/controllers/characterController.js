@@ -41,7 +41,7 @@ export default class CharacterController extends AbstractController{
             }
         });
 
-         document.addEventListener("focusout", (event) => {
+        document.addEventListener("focusout", (event) => {
             const modelKey = event.target.dataset.character;
             if (modelKey && modelKey in CharacterData) {
                 let value = event.target.value;
@@ -54,6 +54,20 @@ export default class CharacterController extends AbstractController{
                 CharacterData[modelKey] = value;
             }
         });
+
+        document.getElementById("add-weapon-btn").addEventListener("click", () => {
+            const container = document.querySelector(".character-weapons dragable-container");
+            const newWeapon = document.createElement("draggable-item");
+
+            newWeapon.id = `weapon-${container.children.length + 1}`;
+
+            newWeapon.innerHTML = /* HTML */ `
+                Weapon ${container.children.length + 1}
+            `;
+            
+            container.appendChild(newWeapon);
+        });
+
     }
 
     initData(){
