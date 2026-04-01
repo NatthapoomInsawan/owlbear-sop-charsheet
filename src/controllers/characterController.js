@@ -60,9 +60,11 @@ export default class CharacterController extends AbstractController{
             const newWeapon = document.createElement("draggable-item");
 
             newWeapon.id = `weapon-${container.children.length + 1}`;
-
             newWeapon.innerHTML = /* HTML */ `
-                Weapon ${container.children.length + 1}
+                <input name="name" placeholder="name">
+                <input name="range" placeholder="range">
+                <input name="damage" placeholder="damage">
+                <input name="traits" placeholder="traits">
             `;
             
             container.appendChild(newWeapon);

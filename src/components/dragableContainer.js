@@ -5,6 +5,9 @@ template.innerHTML = /*html*/`
             display: block;
             border: 2px groove white;
             padding: 10px;
+            width: 100%;  
+            min-width: 0;
+            box-sizing: border-box;
         }
     </style>
     <slot></slot>

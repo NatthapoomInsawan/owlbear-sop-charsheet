@@ -41,10 +41,13 @@ export default class Character extends AbstractView{
         </div>
         <div class = "character-weapons">
             <h3>WEAPONS</h3>
-            <dragable-container lock-child>
-                <draggable-item id="weapon-1">Weapon 1</draggable-item>
-                <draggable-item id="weapon-2">Weapon 2</draggable-item>
-                <draggable-item id="weapon-3">Weapon 3</draggable-item>
+            <div class = "weapon-column">
+                <label>WEAPON</label>
+                <label>RNG</label>
+                <label>DMG</label>
+                <label>TRAITS</label>
+            </div>
+            <dragable-container class = "weapon-row" lock-child>
             </dragable-container>
             <button id = "add-weapon-btn">Add Weapon</button>
         </div>

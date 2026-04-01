@@ -5,7 +5,10 @@ template.innerHTML = /*html*/`
         { 
             display: block; 
             cursor: grab; 
-            user-select: none; 
+            user-select: none;
+            width: 100%;  
+            min-width: 0;
+            box-sizing: border-box;
         }
         :host(.dragging) 
         { 

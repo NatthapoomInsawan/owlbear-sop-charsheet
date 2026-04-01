@@ -88,3 +88,67 @@
 .character-derived-fields label:hover {
   border-color: var(--accent);
 }
+
+.weapon-column {
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  gap: 10px;
+  border-top: 3px solid white;
+  border-left: 3px solid white;
+  border-right: 3px solid white;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.weapon-column label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  overflow: hidden;
+  min-width: 0;
+  justify-content: center;
+}
+
+.weapon-column label:nth-child(n+1):nth-child(-n+3) {
+  flex: 1;
+}
+.weapon-column label:nth-child(4) {
+  flex: 4;
+}
+
+.weapon-row {
+  
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  overflow: hidden;
+  min-width: 0;
+  justify-content: center;
+}
+
+.weapon-row draggable-item {
+  display: flex;
+  min-width: 0; 
+  flex-basis: 0;
+  flex-direction: row;
+  width: 100%;
+  gap: 8px;
+  align-items: center;
+}
+
+.weapon-row draggable-item input {
+  width: 100%;
+  min-width: 0; 
+  box-sizing: border-box;
+  text-align: center;
+}
+
+.weapon-row draggable-item :nth-child(n+1):nth-child(-n+3) {
+  flex: 1;
+}
+
+.weapon-row draggable-item :nth-child(4) {
+  flex: 4;
+}
