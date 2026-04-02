@@ -1,6 +1,6 @@
 import "../CSS/character.css";
 
-import AbstractView from "./AbstractView";
+import AbstractView from "./abstractView.js";
 
 import '../components/dragableItem.js';
 import '../components/dragableContainer.js';

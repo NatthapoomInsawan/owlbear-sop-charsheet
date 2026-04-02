@@ -1,4 +1,4 @@
-import AbstractView from "./AbstractView";
+import AbstractView from "./abstractView.js";
 
 export default class Spell extends AbstractView{
     constructor() {

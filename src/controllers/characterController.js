@@ -1,6 +1,6 @@
-import AbstractController from "./abstractController";
-import CharacterData,{getDerivedStats} from "../models/characterData";
-import {CHARACTER_CLASS, CHARACTER_SUBCLASS, CHARACTER_LINEAGE} from "../models/sopData";
+import AbstractController from "./abstractController.js";
+import CharacterData,{getDerivedStats} from "../models/characterData.js";
+import {CHARACTER_CLASS, CHARACTER_SUBCLASS, CHARACTER_LINEAGE} from "../models/sopData.js";
 
 export default class CharacterController extends AbstractController{
     constructor() {
