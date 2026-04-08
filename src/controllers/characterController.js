@@ -1,6 +1,7 @@
 import AbstractController from "./abstractController.js";
 import CharacterData,{getDerivedStats} from "../models/characterData.js";
 import {CHARACTER_CLASS, CHARACTER_SUBCLASS, CHARACTER_LINEAGE} from "../models/sopData.js";
+import { rollD6Pool } from "../dice/diceLogic.js";
 
 export default class CharacterController extends AbstractController{
     constructor() {
@@ -70,6 +71,12 @@ export default class CharacterController extends AbstractController{
             container.appendChild(newWeapon);
         });
 
+        document.getElementById("test-dice-btn")?.addEventListener("click", async () => {
+            console.log("Rolling 3D6...");
+            const results = await rollD6Pool(3);
+            console.log("Roll results:", results);
+            alert("Rolled: " + results.join(", ") + ` (Total: ${results.reduce((a,b)=>a+b,0)})`);
+        });
     }
 
     initData(){

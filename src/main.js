@@ -1,11 +1,15 @@
-import './style.css';
-import javascriptLogo from './assets/javascript.svg';
-import viteLogo from './assets/vite.svg';
-import heroImg from './assets/hero.png';
-import { route } from './router';
+import "./style.css";
+import javascriptLogo from "./assets/javascript.svg";
+import viteLogo from "./assets/vite.svg";
+import heroImg from "./assets/hero.png";
+import { route } from "./router";
 
-document.querySelector('#app').innerHTML = 
-/*html*/`
+document.querySelector("#app").innerHTML = /*html*/ `
+<section>
+    <div>
+
+    </div>
+</section>
 <section id="center">
   <div class="hero">
     <img src="${heroImg}" class="base" width="170" height="179">
@@ -23,6 +27,7 @@ document.querySelector('#app').innerHTML =
   <div id="content">
   </div>
 </section>
-`
+`;
 
 route();
+
