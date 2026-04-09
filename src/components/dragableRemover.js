@@ -94,8 +94,13 @@ class DragableRemover extends HTMLElement {
 
       if (!this.isDragable(draggingItem)) return;
       
+      const container = draggingItem.parentElement;
+
       draggingItem.remove();
       
+      if (container && typeof container.onChildReorder === 'function') {
+        container.onChildReorder();
+      }
     });
   }
 

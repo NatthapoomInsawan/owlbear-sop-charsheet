@@ -24,6 +24,7 @@ class DraggableItem extends HTMLElement {
     super();
     this.attachShadow({ mode: 'open' });
     this.shadowRoot.appendChild(template.content.cloneNode(true));
+    this.onRemove = null;
   }
 
   connectedCallback() {
@@ -39,6 +40,13 @@ class DraggableItem extends HTMLElement {
     this.addEventListener('dragend', () => {
       this.classList.remove('dragging');
     });
+  }
+
+  remove() {
+    if (this.onRemove) {
+      this.onRemove(this);
+    }
+    super.remove();
   }
 }
 customElements.define('draggable-item', DraggableItem);

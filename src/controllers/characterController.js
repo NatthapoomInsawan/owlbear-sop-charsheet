@@ -1,5 +1,5 @@
 import AbstractController from "./abstractController.js";
-import CharacterData,{getDerivedStats} from "../models/characterData.js";
+import CharacterData, {getDerivedStats, addWeapon, removeWeapon} from "../models/characterData.js";
 import {CHARACTER_CLASS, CHARACTER_SUBCLASS, CHARACTER_LINEAGE} from "../models/sopData.js";
 
 export default class CharacterController extends AbstractController{
@@ -39,6 +39,16 @@ export default class CharacterController extends AbstractController{
 
                 }
             }
+
+            if (event.target.closest(".weapon-row")) {
+                const weaponElement = event.target.closest("draggable-item");
+                if (weaponElement && weaponElement.weaponData){
+                    const inputName = event.target.getAttribute("name");
+                    const weaponData = weaponElement.weaponData;
+                    if (weaponData && inputName)
+                        weaponData[inputName] = event.target.type === "number" ? parseInt(event.target.value) || 0 : event.target.value;
+                }
+            }            
         });
 
         document.addEventListener("focusout", (event) => {
@@ -56,20 +66,18 @@ export default class CharacterController extends AbstractController{
         });
 
         document.getElementById("add-weapon-btn").addEventListener("click", () => {
-            const container = document.querySelector(".character-weapons dragable-container");
-            const newWeapon = document.createElement("draggable-item");
-
-            newWeapon.id = `weapon-${container.children.length + 1}`;
-            newWeapon.innerHTML = /* HTML */ `
-                <input name="name" placeholder="name">
-                <input name="range" placeholder="range">
-                <input name="damage" placeholder="damage">
-                <input name="traits" placeholder="traits">
-            `;
-            
-            container.appendChild(newWeapon);
+            this.createWeapon();
         });
 
+        const weaponContainer = document.querySelector(".character-weapons dragable-container");
+        weaponContainer.onChildReorder = () => {
+            const updatedWeapons = Array.from(weaponContainer.children).map((el, index) => {
+                const weaponData = el.weaponData;
+                el.id = `weapon-${index + 1}`;
+                return weaponData;
+            });
+            CharacterData.weapons = updatedWeapons;
+        };
     }
 
     initData(){
@@ -78,6 +86,8 @@ export default class CharacterController extends AbstractController{
         this.populateDataList("character-class", CHARACTER_CLASS);
         this.populateDataList("character-subclass", CHARACTER_SUBCLASS);
         this.populateDataList("character-lineage", CHARACTER_LINEAGE);
+
+        this.syncCharacterWeapons(CharacterData);
     }
 
     syncCharacterInput(dataObject) {
@@ -102,6 +112,37 @@ export default class CharacterController extends AbstractController{
         } else {
             return parseInt(input) || 0;
         }
+    }
+
+    syncCharacterWeapons(characterData) {
+        characterData.weapons.forEach(weapon => {
+            this.createWeapon(weapon, true);
+        });
+    }
+
+    createWeapon(weaponData, isSync = false) {
+        const container = document.querySelector(".character-weapons dragable-container");
+        const newWeapon = document.createElement("draggable-item");
+        
+        if (!isSync)
+            weaponData = addWeapon("", "", 0, "");
+
+        newWeapon.weaponData = weaponData;
+
+        newWeapon.id = `weapon-${container.children.length + 1}`;
+        newWeapon.innerHTML = /* HTML */ `
+            <input name="name" placeholder="name" value="${weaponData.name}">
+            <input name="range" placeholder="range" value="${weaponData.range}">
+            <input name="damage" placeholder="damage" type="number" min="0" value="${weaponData.damage}">
+            <input name="traits" placeholder="traits" value="${weaponData.traits}">
+        `;
+
+        newWeapon.onRemove = (weaponElement) => {
+            const weaponIndex = Array.from(container.children).indexOf(weaponElement);
+            removeWeapon(weaponIndex);
+        };
+        
+        container.appendChild(newWeapon);
     }
 
 }

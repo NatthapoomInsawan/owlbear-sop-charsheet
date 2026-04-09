@@ -19,6 +19,7 @@ class DragableContainer extends HTMLElement {
     super();
     this.attachShadow({ mode: 'open' });
     this.shadowRoot.appendChild(template.content.cloneNode(true));
+    this.onChildReorder = null;
   }
 
   static get observedAttributes() {
@@ -48,6 +49,9 @@ class DragableContainer extends HTMLElement {
 
       if (draggingItem.nextSibling !== nextSibling) {
         this.insertBefore(draggingItem, nextSibling);
+        
+        if (this.onChildReorder)
+          this.onChildReorder();
       }
     });
   }

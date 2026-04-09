@@ -19,6 +19,8 @@ let initiative = agility;
 let luck = fate;
 let armor = 0;
 
+let weapons = [];
+
 export default { 
     playerName: playerName,
     characterName: characterName,
@@ -37,8 +39,9 @@ export default {
     grit: grit,
     initiative: initiative,
     luck: luck,
-    armor: armor
+    armor: armor,
 
+    weapons: weapons
 };
 
 export function getDerivedStats(attributeName) {
@@ -51,3 +54,20 @@ export function getDerivedStats(attributeName) {
     return derivationStatKvp[attributeName] || [];
 }
 
+export function addWeapon(weaponName, weaponRange, weaponDamage, weaponTraits) {
+    const weapon = {
+        name: weaponName,
+        range: weaponRange,
+        damage: weaponDamage,
+        traits: weaponTraits
+    };
+
+    weapons.push(weapon);
+    return weapon;
+}
+
+export function removeWeapon(weaponIndex) {
+    if (weaponIndex >= 0 && weaponIndex < weapons.length) {
+        weapons.splice(weaponIndex, 1);
+    }
+}
