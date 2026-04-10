@@ -111,11 +111,14 @@
   justify-content: center;
 }
 
-.weapon-column label:nth-child(n+1):nth-child(-n+3) {
+.weapon-column label:nth-child(1) {
+  flex: 2;
+}
+.weapon-column label:nth-child(n+2):nth-child(-n+3) {
   flex: 1;
 }
 .weapon-column label:nth-child(4) {
-  flex: 4;
+  flex: 5;
 }
 
 .weapon-row {
@@ -145,10 +148,41 @@
   text-align: center;
 }
 
-.weapon-row draggable-item :nth-child(n+1):nth-child(-n+3) {
+.weapon-row draggable-item :nth-child(1) {
+  flex: 2;
+}
+
+.weapon-row draggable-item :nth-child(n+2):nth-child(-n+3) {
   flex: 1;
 }
 
 .weapon-row draggable-item :nth-child(4) {
-  flex: 4;
+  flex: 5;
+}
+
+
+.skill-column {
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  gap: 10px;
+  border-top: 3px solid white;
+  border-left: 3px solid white;
+  border-right: 3px solid white;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.skill-column label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  overflow: hidden;
+  min-width: 0;
+  justify-content: center;
+}
+
+.skill-column label:nth-child(n) {
+  flex: 1;
 }

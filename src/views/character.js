@@ -51,6 +51,18 @@ export default class Character extends AbstractView{
             </dragable-container>
             <button id = "add-weapon-btn">Add Weapon</button>
         </div>
+        <div class = "character-skills">
+            <h3>SKILLS</h3>
+            <div class = "skill-column">
+                <label>SKILL</label>
+                <label>ATTRIBUTE</label>
+                <label>RANK</label>
+                <label>RESULT</label>
+            </div>
+            <dragable-container class = "skill-row" lock-child>
+            </dragable-container>
+            <button id = "add-skill-btn">Add Skill</button>
+        </div>
         `
     }
 }
