@@ -46,3 +46,12 @@ export const CHARACTER_LINEAGE = [
     "Smolyani",
     "Zahjik"
 ];
+
+export const CHARACTER_ATTRIBUTES = [
+    "might",
+    "toughness",
+    "agility",
+    "willpower",
+    "intelligence",
+    "fate"
+];

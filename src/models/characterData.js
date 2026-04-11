@@ -1,48 +1,33 @@
 
-let playerName = ""
+const characterData = {
+    playerName: "",
+    characterName: "",
+    characterClass: "",
+    characterSubclass: "",
+    characterLineage: "",
+    characterAmbition: "",
 
-let characterName = "";
-let characterClass = "";
-let characterSubclass = "";
-let characterLineage = "";
-let characterAmbition = "";
+    might: 0,
+    toughness: 0,
+    agility: 0,
+    willpower: 0,
+    intelligence: 0,
+    fate: 0,
 
-let might = 0;
-let toughness = 0;
-let agility = 0;
-let willpower = 0;
-let intelligence = 0;
-let fate = 0;
+    grit: 0,
+    initiative: 0,
+    luck: 0,
+    armor: 0,
 
-let grit = toughness;
-let initiative = agility;
-let luck = fate;
-let armor = 0;
+    weapons: [],
+    skills: []
+}
 
-let weapons = [];
+characterData.grit = characterData.toughness;
+characterData.initiative = characterData.agility;
+characterData.luck = characterData.fate;
 
-export default { 
-    playerName: playerName,
-    characterName: characterName,
-    characterClass: characterClass,
-    characterSubclass: characterSubclass,
-    characterLineage: characterLineage,
-    characterAmbition: characterAmbition,
-    
-    might: might,
-    toughness: toughness,
-    agility: agility,
-    willpower: willpower,
-    intelligence: intelligence,
-    fate: fate,
-
-    grit: grit,
-    initiative: initiative,
-    luck: luck,
-    armor: armor,
-
-    weapons: weapons
-};
+export default characterData;
 
 export function getDerivedStats(attributeName) {
     const derivationStatKvp = {
@@ -62,12 +47,29 @@ export function addWeapon(weaponName, weaponRange, weaponDamage, weaponTraits) {
         traits: weaponTraits
     };
 
-    weapons.push(weapon);
+    characterData.weapons.push(weapon);
     return weapon;
 }
 
 export function removeWeapon(weaponIndex) {
-    if (weaponIndex >= 0 && weaponIndex < weapons.length) {
-        weapons.splice(weaponIndex, 1);
+    if (weaponIndex >= 0 && weaponIndex < characterData.weapons.length) {
+        characterData.weapons.splice(weaponIndex, 1);
+    }
+}
+
+export function addSkill(skillName, skillAttribute, skillRank) {
+    const skill = {
+        name: skillName,
+        attribute: skillAttribute,
+        rank: skillRank,
+        value: skillRank + (Number(characterData[skillAttribute]) || 0)
+    };
+    characterData.skills.push(skill);
+    return skill;
+}
+
+export function removeSkill(skillIndex) {
+    if (skillIndex >= 0 && skillIndex < characterData.skills.length) {
+        characterData.skills.splice(skillIndex, 1);
     }
 }

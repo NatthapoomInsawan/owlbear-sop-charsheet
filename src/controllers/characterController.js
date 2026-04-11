@@ -1,6 +1,7 @@
 import AbstractController from "./abstractController.js";
-import CharacterData, {getDerivedStats, addWeapon, removeWeapon} from "../models/characterData.js";
-import {CHARACTER_CLASS, CHARACTER_SUBCLASS, CHARACTER_LINEAGE} from "../models/sopData.js";
+import CharacterData, {getDerivedStats, addWeapon, removeWeapon, addSkill, removeSkill} from "../models/characterData.js";
+import {CHARACTER_CLASS, CHARACTER_SUBCLASS, CHARACTER_LINEAGE, CHARACTER_ATTRIBUTES} from "../models/sopData.js";
+import characterData from "../models/characterData.js";
 
 export default class CharacterController extends AbstractController{
     constructor() {
@@ -37,6 +38,10 @@ export default class CharacterController extends AbstractController{
                         }
                     });
 
+                    const attributeChangeEvent = new CustomEvent("character-attribute-changed", { 
+                        detail: { attribute: attributeKey, value: CharacterData[attributeKey] } 
+                    });
+                    document.dispatchEvent(attributeChangeEvent);
                 }
             }
 
@@ -69,15 +74,12 @@ export default class CharacterController extends AbstractController{
             this.createWeapon();
         });
 
-        const weaponContainer = document.querySelector(".character-weapons dragable-container");
-        weaponContainer.onChildReorder = () => {
-            const updatedWeapons = Array.from(weaponContainer.children).map((el, index) => {
-                const weaponData = el.weaponData;
-                el.id = `weapon-${index + 1}`;
-                return weaponData;
-            });
-            CharacterData.weapons = updatedWeapons;
-        };
+        document.getElementById("add-skill-btn").addEventListener("click", () => {
+            this.createSkill();
+        });
+
+        this.bindContainerReordering(".character-weapons dragable-container", "weapon");
+        this.bindContainerReordering(".character-skills dragable-container", "skill");
     }
 
     initData(){
@@ -88,18 +90,9 @@ export default class CharacterController extends AbstractController{
         this.populateDataList("character-lineage", CHARACTER_LINEAGE);
 
         this.syncCharacterWeapons(CharacterData);
+        this.syncCharacterSkills(CharacterData);
     }
 
-    syncCharacterInput(dataObject) {
-        const inputs = document.querySelectorAll("[data-character]");
-        inputs.forEach(input => {
-            const modelKey = input.dataset.character;
-            if (modelKey in dataObject) {
-                const fallback = input.type === "number" ? 0 : "";
-                input.value = dataObject[modelKey] ?? fallback;
-            }
-        });
-    }
 
     calculateMathExpression(input) {
         const isExpression = /^[0-9+\-*/().\s]+$/.test(input);
@@ -112,6 +105,29 @@ export default class CharacterController extends AbstractController{
         } else {
             return parseInt(input) || 0;
         }
+    }
+
+    bindContainerReordering(containerSelector, dataKey) {
+        const container = document.querySelector(containerSelector);
+        container.onChildReorder = () => {
+            const updatedData = Array.from(container.children).map((element, index) => {
+                const itemData = element[`${dataKey}Data`];
+                element.id = `${dataKey}-${index + 1}`;
+                return itemData;
+            });
+            CharacterData[`${dataKey}s`] = updatedData;
+        };
+    }
+
+    syncCharacterInput(dataObject) {
+        const inputs = document.querySelectorAll("[data-character]");
+        inputs.forEach(input => {
+            const modelKey = input.dataset.character;
+            if (modelKey in dataObject) {
+                const fallback = input.type === "number" ? 0 : "";
+                input.value = dataObject[modelKey] ?? fallback;
+            }
+        });
     }
 
     syncCharacterWeapons(characterData) {
@@ -143,6 +159,71 @@ export default class CharacterController extends AbstractController{
         };
         
         container.appendChild(newWeapon);
+    }
+
+    syncCharacterSkills(characterData) {
+        characterData.skills.forEach(skill => {
+            this.createSkill(skill, true);
+        });
+    }
+
+    createSkill(skillData, isSync = false) {
+        const container = document.querySelector(".character-skills dragable-container");
+        const newSkill = document.createElement("draggable-item");
+
+        if (!isSync)
+            skillData = addSkill("", "might", 0);
+
+        newSkill.skillData = skillData;
+
+        newSkill.id = `skill-${container.children.length + 1}`;
+        newSkill.innerHTML = /* HTML */ `
+            <input name="skill" placeholder="name" value="${skillData.name}">
+            <select name="attribute" value="${skillData.attribute}">
+                ${CHARACTER_ATTRIBUTES.map(attribute => `<option value="${attribute}" ${attribute === skillData.attribute ? "selected" : ""}>${attribute}</option>`).join("")}
+            </select>
+            <input name="rank" placeholder="rank" type="number" min="0" value="${skillData.rank}">
+            <label name="result">${skillData.value}</label>
+        `;
+
+
+        newSkill.querySelector('input[name="skill"]').addEventListener("input", (event) => {
+            const name = event.target.value;
+            newSkill.skillData.name = name;
+        });
+
+        newSkill.querySelector('select[name="attribute"]').addEventListener("change", (event) => {
+            const attribute = event.target.value;
+            newSkill.skillData.attribute = attribute;
+            recalculateSkillResults();
+        });
+
+        newSkill.querySelector('input[name="rank"]').addEventListener("input", (event) => {
+            const rank = parseInt(event.target.value) || 0;
+            newSkill.skillData.rank = rank;
+            recalculateSkillResults();
+        });
+        
+        document.addEventListener("character-attribute-changed", recalculateSkillResults);
+
+        newSkill.onRemove = (skillElement) => {
+            const skillIndex = Array.from(container.children).indexOf(skillElement);
+            document.removeEventListener("character-attribute-changed", recalculateSkillResults);
+            removeSkill(skillIndex);
+        };
+
+
+        container.appendChild(newSkill);
+
+
+        function recalculateSkillResults(){
+            const rank = parseInt(newSkill.querySelector('input[name="rank"]').value) || 0;
+            const attribute = newSkill.querySelector('select[name="attribute"]').value;
+            const resultLabel = newSkill.querySelector('label[name="result"]');
+            
+            newSkill.skillData.value = rank + (Number(characterData[attribute]) || 0);
+            resultLabel.textContent = newSkill.skillData.value;
+        }
     }
 
 }
