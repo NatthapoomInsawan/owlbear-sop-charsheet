@@ -5,15 +5,18 @@ import AbstractView from "./abstractView.js";
 import '../components/dragableItem.js';
 import '../components/dragableContainer.js';
 
-export default class Character extends AbstractView{
+export default class Character extends AbstractView {
     constructor() {
         super();
         this.setTitle("Character");
     }
 
-    async getHtml(){
+    async getHtml() {
         return /*html*/`
-        <h1>Character</h1>
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <h1>Character</h1>
+            <button id="test-dice-btn" style="padding: 5px 10px; cursor: pointer;">Test 3D6 Roll</button>
+        </div>
         <div class = "character-info">
             <label>CHARACTER <input placeholder = "name" data-character = "characterName"></label>
             <label>PLAYER <input placeholder = "name" data-character = "playerName"></label>

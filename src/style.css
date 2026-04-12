@@ -294,3 +294,13 @@ code {
     border-right-color: var(--border);
   }
 }
+#dice-canvas-container {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 500px;
+  height: 500px;
+  pointer-events: none; /* Let clicks pass through to character sheet */
+  z-index: 9999; /* Display on top */
+}

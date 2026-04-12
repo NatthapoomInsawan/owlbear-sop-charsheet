@@ -1,15 +1,15 @@
 import AbstractController from "./abstractController.js";
-import CharacterData, {getDerivedStats, addWeapon, removeWeapon, addSkill, removeSkill} from "../models/characterData.js";
-import {CHARACTER_CLASS, CHARACTER_SUBCLASS, CHARACTER_LINEAGE, CHARACTER_ATTRIBUTES} from "../models/sopData.js";
-import characterData from "../models/characterData.js";
+import CharacterData, { getDerivedStats } from "../models/characterData.js";
+import { CHARACTER_CLASS, CHARACTER_SUBCLASS, CHARACTER_LINEAGE } from "../models/sopData.js";
+import { rollD6Pool } from "../dice/diceLogic.js";
 
-export default class CharacterController extends AbstractController{
+export default class CharacterController extends AbstractController {
     constructor() {
         super();
     }
 
     bindEvents() {
-        document.addEventListener("input", (event) =>{
+        document.addEventListener("input", (event) => {
             const modelKey = event.target.dataset.character;
             if (modelKey && modelKey in CharacterData) {
                 let value = event.target.value;
@@ -38,8 +38,8 @@ export default class CharacterController extends AbstractController{
                         }
                     });
 
-                    const attributeChangeEvent = new CustomEvent("character-attribute-changed", { 
-                        detail: { attribute: attributeKey, value: CharacterData[attributeKey] } 
+                    const attributeChangeEvent = new CustomEvent("character-attribute-changed", {
+                        detail: { attribute: attributeKey, value: CharacterData[attributeKey] }
                     });
                     document.dispatchEvent(attributeChangeEvent);
                 }
@@ -47,20 +47,20 @@ export default class CharacterController extends AbstractController{
 
             if (event.target.closest(".weapon-row")) {
                 const weaponElement = event.target.closest("draggable-item");
-                if (weaponElement && weaponElement.weaponData){
+                if (weaponElement && weaponElement.weaponData) {
                     const inputName = event.target.getAttribute("name");
                     const weaponData = weaponElement.weaponData;
                     if (weaponData && inputName)
                         weaponData[inputName] = event.target.type === "number" ? parseInt(event.target.value) || 0 : event.target.value;
                 }
-            }            
+            }
         });
 
         document.addEventListener("focusout", (event) => {
             const modelKey = event.target.dataset.character;
             if (modelKey && modelKey in CharacterData) {
                 let value = event.target.value;
-                
+
                 if (event.target.hasAttribute("calc-field")) {
                     value = this.calculateMathExpression(value);
                     event.target.value = value; // Update the input with the calculated value
@@ -71,18 +71,29 @@ export default class CharacterController extends AbstractController{
         });
 
         document.getElementById("add-weapon-btn").addEventListener("click", () => {
-            this.createWeapon();
+            const container = document.querySelector(".character-weapons dragable-container");
+            const newWeapon = document.createElement("draggable-item");
+
+            newWeapon.id = `weapon-${container.children.length + 1}`;
+            newWeapon.innerHTML = /* HTML */ `
+                <input name="name" placeholder="name">
+                <input name="range" placeholder="range">
+                <input name="damage" placeholder="damage">
+                <input name="traits" placeholder="traits">
+            `;
+
+            container.appendChild(newWeapon);
         });
 
-        document.getElementById("add-skill-btn").addEventListener("click", () => {
-            this.createSkill();
+        document.getElementById("test-dice-btn")?.addEventListener("click", async () => {
+            console.log("Rolling 3D6...");
+            const results = await rollD6Pool(3);
+            console.log("Roll results:", results);
+            alert("Rolled: " + results.join(", ") + ` (Total: ${results.reduce((a, b) => a + b, 0)})`);
         });
-
-        this.bindContainerReordering(".character-weapons dragable-container", "weapon");
-        this.bindContainerReordering(".character-skills dragable-container", "skill");
     }
 
-    initData(){
+    initData() {
         this.syncCharacterInput(CharacterData);
 
         this.populateDataList("character-class", CHARACTER_CLASS);
@@ -139,7 +150,7 @@ export default class CharacterController extends AbstractController{
     createWeapon(weaponData, isSync = false) {
         const container = document.querySelector(".character-weapons dragable-container");
         const newWeapon = document.createElement("draggable-item");
-        
+
         if (!isSync)
             weaponData = addWeapon("", "", 0, "");
 
@@ -157,7 +168,7 @@ export default class CharacterController extends AbstractController{
             const weaponIndex = Array.from(container.children).indexOf(weaponElement);
             removeWeapon(weaponIndex);
         };
-        
+
         container.appendChild(newWeapon);
     }
 
@@ -203,7 +214,7 @@ export default class CharacterController extends AbstractController{
             newSkill.skillData.rank = rank;
             recalculateSkillResults();
         });
-        
+
         document.addEventListener("character-attribute-changed", recalculateSkillResults);
 
         newSkill.onRemove = (skillElement) => {
@@ -216,11 +227,11 @@ export default class CharacterController extends AbstractController{
         container.appendChild(newSkill);
 
 
-        function recalculateSkillResults(){
+        function recalculateSkillResults() {
             const rank = parseInt(newSkill.querySelector('input[name="rank"]').value) || 0;
             const attribute = newSkill.querySelector('select[name="attribute"]').value;
             const resultLabel = newSkill.querySelector('label[name="result"]');
-            
+
             newSkill.skillData.value = rank + (Number(characterData[attribute]) || 0);
             resultLabel.textContent = newSkill.skillData.value;
         }

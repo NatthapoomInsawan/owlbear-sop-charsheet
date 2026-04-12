@@ -12,6 +12,8 @@
     "vite": "^8.0.0"
   },
   "dependencies": {
-    "@owlbear-rodeo/sdk": "^3.1.0"
+    "@dimforge/rapier3d-compat": "^0.19.3",
+    "@owlbear-rodeo/sdk": "^3.1.0",
+    "three": "^0.183.2"
   }
 }
