@@ -45,15 +45,6 @@ export default class CharacterController extends AbstractController{
                 }
             }
 
-            if (event.target.closest(".weapon-row")) {
-                const weaponElement = event.target.closest("draggable-item");
-                if (weaponElement && weaponElement.weaponData){
-                    const inputName = event.target.getAttribute("name");
-                    const weaponData = weaponElement.weaponData;
-                    if (weaponData && inputName)
-                        weaponData[inputName] = event.target.type === "number" ? parseInt(event.target.value) || 0 : event.target.value;
-                }
-            }            
         });
 
         document.addEventListener("focusout", (event) => {
@@ -153,6 +144,15 @@ export default class CharacterController extends AbstractController{
             <input name="traits" placeholder="traits" value="${weaponData.traits}">
         `;
 
+        newWeapon.querySelectorAll('input').forEach(input => {
+            input.addEventListener("input", (event) => {
+                const inputName = event.target.getAttribute("name");
+                const weaponData = newWeapon.weaponData;
+                if (weaponData && inputName)
+                    weaponData[inputName] = event.target.type === "number" ? parseInt(event.target.value) || 0 : event.target.value;
+            });
+        });
+
         newWeapon.onRemove = (weaponElement) => {
             const weaponIndex = Array.from(container.children).indexOf(weaponElement);
             removeWeapon(weaponIndex);
@@ -178,7 +178,7 @@ export default class CharacterController extends AbstractController{
 
         newSkill.id = `skill-${container.children.length + 1}`;
         newSkill.innerHTML = /* HTML */ `
-            <input name="skill" placeholder="name" value="${skillData.name}">
+            <input name="name" placeholder="name" value="${skillData.name}">
             <select name="attribute" value="${skillData.attribute}">
                 ${CHARACTER_ATTRIBUTES.map(attribute => `<option value="${attribute}" ${attribute === skillData.attribute ? "selected" : ""}>${attribute}</option>`).join("")}
             </select>
@@ -186,10 +186,13 @@ export default class CharacterController extends AbstractController{
             <label name="result">${skillData.value}</label>
         `;
 
-
-        newSkill.querySelector('input[name="skill"]').addEventListener("input", (event) => {
-            const name = event.target.value;
-            newSkill.skillData.name = name;
+        newSkill.querySelectorAll('input').forEach(input => {
+            input.addEventListener("input", (event) => {
+                const inputName = event.target.getAttribute("name");
+                const skillData = newSkill.skillData;
+                if (skillData && inputName)
+                    skillData[inputName] = event.target.type === "number" ? parseInt(event.target.value) || 0 : event.target.value;
+            });
         });
 
         newSkill.querySelector('select[name="attribute"]').addEventListener("change", (event) => {
@@ -198,12 +201,6 @@ export default class CharacterController extends AbstractController{
             recalculateSkillResults();
         });
 
-        newSkill.querySelector('input[name="rank"]').addEventListener("input", (event) => {
-            const rank = parseInt(event.target.value) || 0;
-            newSkill.skillData.rank = rank;
-            recalculateSkillResults();
-        });
-        
         document.addEventListener("character-attribute-changed", recalculateSkillResults);
 
         newSkill.onRemove = (skillElement) => {
