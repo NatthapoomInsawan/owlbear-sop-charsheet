@@ -30,4 +30,3 @@ document.querySelector("#app").innerHTML = /*html*/ `
 `;
 
 route();
-
