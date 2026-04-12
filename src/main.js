@@ -1,13 +1,15 @@
-import './style.css';
-import javascriptLogo from './assets/javascript.svg';
-import viteLogo from './assets/vite.svg';
-import heroImg from './assets/hero.png';
-import { route } from './router';
+import "./style.css";
+import javascriptLogo from "./assets/javascript.svg";
+import viteLogo from "./assets/vite.svg";
+import heroImg from "./assets/hero.png";
+import { route } from "./router";
 
-import './components/dragableRemover';
+document.querySelector("#app").innerHTML = /*html*/ `
+<section>
+    <div>
 
-document.querySelector('#app').innerHTML = 
-/*html*/`
+    </div>
+</section>
 <section id="center">
   <div class="hero">
     <img src="${heroImg}" class="base" width="170" height="179">
@@ -27,6 +29,6 @@ document.querySelector('#app').innerHTML =
   <dragable-remover>
   </dragable-remover>
 </section>
-`
+`;
 
 route();

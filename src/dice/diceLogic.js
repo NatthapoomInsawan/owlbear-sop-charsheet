@@ -1,0 +1,75 @@
+import { initDiceTray, addDiceToTray, clearDice } from './diceTray.js';
+
+let isTrayInitialized = false;
+let currentRollPromise = null;
+let activeDice = [];
+
+export async function initDiceSystem() {
+    if (!isTrayInitialized) {
+        await initDiceTray();
+        isTrayInitialized = true;
+    }
+}
+
+/**
+ * Rolls a pool of D6 dice and returns the array of results
+ * @param {number} count Number of D6 to roll
+ * @returns {Promise<number[]>} Array of face values
+ */
+export async function rollD6Pool(count) {
+    if (!isTrayInitialized) {
+        await initDiceSystem();
+    }
+
+    // Clear previous roll if exists
+    clearDice();
+    activeDice = [];
+
+    // Make canvas container visible and grab pointer events if we want interaction
+    const container = document.getElementById('dice-canvas-container');
+    if (container) {
+        container.style.opacity = '1';
+        // container.style.pointerEvents = 'auto'; // if you want users to click dice
+    }
+
+    // Spawn and throw requested amount of dice
+    for (let i = 0; i < count; i++) {
+        const dice = addDiceToTray();
+        if (dice) {
+            dice.throw();
+            activeDice.push(dice);
+        }
+    }
+
+    // Create a promise that resolves when all dice stop moving
+    currentRollPromise = new Promise((resolve) => {
+        const checkAsleep = setInterval(() => {
+            let allAsleep = true;
+            for (const dice of activeDice) {
+                if (!dice.isAsleep()) {
+                    allAsleep = false;
+                    break;
+                }
+            }
+
+            if (allAsleep) {
+                clearInterval(checkAsleep);
+                
+                // Read faces
+                const results = activeDice.map(d => d.getTopFace());
+                resolve(results);
+            }
+        }, 100);
+    });
+
+    const finalResults = await currentRollPromise;
+
+    // Optional: Hide tray automatically after a delay or wait for user to click away
+    setTimeout(() => {
+        if (container) {
+            container.style.opacity = '0';
+        }
+    }, 3000); // fade out after 3s
+
+    return finalResults;
+}

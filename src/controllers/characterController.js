@@ -1,7 +1,7 @@
 import AbstractController from "./abstractController.js";
 import CharacterData, {getDerivedStats, addWeapon, removeWeapon, addSkill, removeSkill} from "../models/characterData.js";
 import {CHARACTER_CLASS, CHARACTER_SUBCLASS, CHARACTER_LINEAGE, CHARACTER_ATTRIBUTES} from "../models/sopData.js";
-import characterData from "../models/characterData.js";
+import { rollD6Pool } from "../dice/diceLogic.js";
 
 export default class CharacterController extends AbstractController{
     constructor() {
@@ -67,6 +67,13 @@ export default class CharacterController extends AbstractController{
 
         document.getElementById("add-skill-btn").addEventListener("click", () => {
             this.createSkill();
+        });
+
+        document.getElementById("test-dice-btn")?.addEventListener("click", async () => {
+            console.log("Rolling 3D6...");
+            const results = await rollD6Pool(3);
+            console.log("Roll results:", results);
+            alert("Rolled: " + results.join(", ") + ` (Total: ${results.reduce((a, b) => a + b, 0)})`);
         });
 
         this.bindContainerReordering(".character-weapons dragable-container", "weapon");
@@ -218,7 +225,7 @@ export default class CharacterController extends AbstractController{
             const attribute = newSkill.querySelector('select[name="attribute"]').value;
             const resultLabel = newSkill.querySelector('label[name="result"]');
             
-            newSkill.skillData.value = rank + (Number(characterData[attribute]) || 0);
+            newSkill.skillData.value = rank + (Number(CharacterData[attribute]) || 0);
             resultLabel.textContent = newSkill.skillData.value;
         }
     }
