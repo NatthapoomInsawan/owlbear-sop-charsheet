@@ -199,6 +199,7 @@ export default class CharacterController extends AbstractController{
                 const skillData = newSkill.skillData;
                 if (skillData && inputName)
                     skillData[inputName] = event.target.type === "number" ? parseInt(event.target.value) || 0 : event.target.value;
+                recalculateSkillResults();
             });
         });
 
