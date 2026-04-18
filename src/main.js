@@ -4,6 +4,8 @@ import viteLogo from "./assets/vite.svg";
 import heroImg from "./assets/hero.png";
 import { route } from "./router";
 
+import "./components/dragableRemover.js";
+
 document.querySelector("#app").innerHTML = /*html*/ `
 <section>
     <div>
