@@ -59,6 +59,8 @@ export class DiceModel {
         this.mesh = new THREE.Mesh(geometry, diceMaterials);
         // Start high up to drop
         this.mesh.position.set(0, 10, 0);
+        this.mesh.castShadow = true;
+        this.mesh.receiveShadow = true;
         scene.add(this.mesh);
 
         // --- Physics (Rapier3D) ---

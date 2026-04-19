@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+  <head>
+  </head>
+  <body>
+    <div id="dice-canvas-container"></div>
+
+    <style>
+        html, body {
+        margin: 0;
+        padding: 0;
+        width: auto;
+        height: auto;
+        overflow: hidden;
+        pointer-events: none !important;
+      }
+    </style>
+
+    <script type="module">
+      import { rollD6Pool } from '/src/dice/diceLogic.js';
+      import OBR from "@owlbear-rodeo/sdk";
+
+      console.log("Rolling 3D6...");
+      const results = await rollD6Pool(3);
+      console.log("Roll results:", results);
+      OBR.notification.show(`Rolled 3D6: ${results.join(", ")} (Total: ${results.reduce((a, b) => a + b, 0)})`);
+
+    </script>
+  </body>
+</html>

@@ -1,7 +1,8 @@
 import AbstractController from "./abstractController.js";
 import CharacterData, {getDerivedStats, addWeapon, removeWeapon, addSkill, removeSkill} from "../models/characterData.js";
 import {CHARACTER_CLASS, CHARACTER_SUBCLASS, CHARACTER_LINEAGE, CHARACTER_ATTRIBUTES} from "../models/sopData.js";
-import { rollD6Pool } from "../dice/diceLogic.js";
+
+import OBR from "@owlbear-rodeo/sdk";
 
 export default class CharacterController extends AbstractController{
     constructor() {
@@ -70,10 +71,14 @@ export default class CharacterController extends AbstractController{
         });
 
         document.getElementById("test-dice-btn")?.addEventListener("click", async () => {
-            console.log("Rolling 3D6...");
-            const results = await rollD6Pool(3);
-            console.log("Roll results:", results);
-            alert("Rolled: " + results.join(", ") + ` (Total: ${results.reduce((a, b) => a + b, 0)})`);
+            OBR.modal.open({
+                            id: "roll-popover",
+                            url: "/src/dice/diceCanvas.html",
+                            fullScreen: true,
+                            hideBackdrop: true,
+                            hidePaper: true,
+                            disablePointerEvents: true,
+                        });
         });
 
         this.bindContainerReordering(".character-weapons dragable-container", "weapon");

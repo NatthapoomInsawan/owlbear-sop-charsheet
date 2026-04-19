@@ -1,5 +1,7 @@
 import { initDiceTray, addDiceToTray, clearDice } from './diceTray.js';
 
+import OBR from "@owlbear-rodeo/sdk";
+
 let isTrayInitialized = false;
 let currentRollPromise = null;
 let activeDice = [];
@@ -63,12 +65,13 @@ export async function rollD6Pool(count) {
     });
 
     const finalResults = await currentRollPromise;
-
     // Optional: Hide tray automatically after a delay or wait for user to click away
     setTimeout(() => {
         if (container) {
             container.style.opacity = '0';
         }
+
+        OBR.modal.close("roll-popover");
     }, 3000); // fade out after 3s
 
     return finalResults;
