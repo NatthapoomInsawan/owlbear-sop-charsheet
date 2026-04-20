@@ -17,14 +17,20 @@
     </style>
 
     <script type="module">
-      import { rollD6Pool } from '/src/dice/diceLogic.js';
+      import { simulateDiceRoll } from '/src/dice/diceController.js';
+
       import OBR from "@owlbear-rodeo/sdk";
 
-      console.log("Rolling 3D6...");
-      const results = await rollD6Pool(3);
-      console.log("Roll results:", results);
-      OBR.notification.show(`Rolled 3D6: ${results.join(", ")} (Total: ${results.reduce((a, b) => a + b, 0)})`);
+      async function initSystem(){
+        const urlParams = new URLSearchParams(window.location.search);
+        const diceCount = parseInt(urlParams.get('diceCount')) || 0;
 
+        const results = await simulateDiceRoll(diceCount);
+        console.log("Roll results:", results);
+        OBR.notification.show(`Rolled 3D6: ${results.join(", ")} (Total: ${results.reduce((a, b) => a + b, 0)})`);
+      }
+
+      await initSystem();
     </script>
   </body>
 </html>

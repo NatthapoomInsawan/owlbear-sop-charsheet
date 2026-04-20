@@ -1,17 +1,4 @@
-import { initDiceTray, addDiceToTray, clearDice } from './diceTray.js';
-
 import OBR from "@owlbear-rodeo/sdk";
-
-let isTrayInitialized = false;
-let currentRollPromise = null;
-let activeDice = [];
-
-export async function initDiceSystem() {
-    if (!isTrayInitialized) {
-        await initDiceTray();
-        isTrayInitialized = true;
-    }
-}
 
 /**
  * Rolls a pool of D6 dice and returns the array of results
@@ -19,23 +6,34 @@ export async function initDiceSystem() {
  * @returns {Promise<number[]>} Array of face values
  */
 export async function rollD6Pool(count) {
-    if (!isTrayInitialized) {
-        await initDiceSystem();
-    }
+    await OBR.modal.open({
+        id: "roll-popover",
+        url: `/src/dice/diceCanvas.html?diceCount=${count}`,
+        fullScreen: true,
+        hideBackdrop: true,
+        hidePaper: true,
+        disablePointerEvents: true,
+    });
+}
+
+export async function simulateDiceRoll(diceCount){
+
+    await initDiceTray();
 
     // Clear previous roll if exists
     clearDice();
-    activeDice = [];
+    let activeDice = [];
 
     // Make canvas container visible and grab pointer events if we want interaction
     const container = document.getElementById('dice-canvas-container');
+
     if (container) {
         container.style.opacity = '1';
         // container.style.pointerEvents = 'auto'; // if you want users to click dice
     }
 
     // Spawn and throw requested amount of dice
-    for (let i = 0; i < count; i++) {
+    for (let i = 0; i < diceCount ; i++) {
         const dice = addDiceToTray();
         if (dice) {
             dice.throw();
@@ -44,7 +42,7 @@ export async function rollD6Pool(count) {
     }
 
     // Create a promise that resolves when all dice stop moving
-    currentRollPromise = new Promise((resolve) => {
+    const currentRollPromise = new Promise((resolve) => {
         const checkAsleep = setInterval(() => {
             let allAsleep = true;
             for (const dice of activeDice) {
