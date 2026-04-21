@@ -33,7 +33,7 @@ const OBRinitPromise = new Promise((resolve)=>{
         renderer.setSize(width, height);
         renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
         renderer.shadowMap.enabled = true;
-        renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+        renderer.shadowMap.type = THREE.PCFShadowMap;
 
         // To allow transparent background so the character sheet is visible
         renderer.setClearColor(0x000000, 0); 
