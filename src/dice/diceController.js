@@ -1,3 +1,5 @@
+import { initDiceTray, clearDice, addDiceToTray } from '/src/dice/diceTray';
+
 import OBR from "@owlbear-rodeo/sdk";
 
 /**
