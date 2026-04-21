@@ -36,7 +36,7 @@ export default class Character extends AbstractView {
                 <label>FATE <input type = "number" step = "1" min = "1" max = "4" placeholder = "fate" data-character = "fate" character-attribute = "fate"></label>
             </div>
             <div class = "character-derived-fields">
-                <label>GRIT <input type = "number" step = "1" min = "0" placeholder = "grit" data-character = "grit"></label>
+                <label>GRIT <input type = "number" step = "1" min = "0" placeholder = "grit" data-character = "grit" data-character-skill = "grit"></label>
                 <label>INIT <input type = "number" step = "1" min = "0" placeholder = "initiative" data-character = "initiative"></label>
                 <label>LUCK <input type = "number" step = "1" min = "0" placeholder = "luck" data-character = "luck"></label>
                 <label>ARMOR <input type = "number" step = "1" min = "0" placeholder = "armor" data-character = "armor"></label>

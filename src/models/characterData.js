@@ -27,16 +27,30 @@ characterData.grit = characterData.toughness;
 characterData.initiative = characterData.agility;
 characterData.luck = characterData.fate;
 
+addSkill("grit", "toughness", 0, 0);
+
 export default characterData;
 
 export function getDerivedStats(attributeName) {
     const derivationStatKvp = {
-        toughness: ["grit"],
         agility: ["initiative"],
         fate: ["luck"],
     };
 
     return derivationStatKvp[attributeName] || [];
+}
+
+export function getDerivedSkill(skillName){
+    const skill = characterData.skills.find((skill)=>skill.name === skillName);
+    let output = null;
+
+    switch(skillName){
+        case "grit":
+            output = skill ? Math.max(skill.value, characterData.grit) : characterData.grit;
+            break;
+    }
+
+    return output;
 }
 
 export function addWeapon(weaponName, weaponRange, weaponDamage, weaponTraits) {

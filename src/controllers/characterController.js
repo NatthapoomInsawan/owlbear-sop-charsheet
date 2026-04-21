@@ -1,5 +1,5 @@
 import AbstractController from "./abstractController.js";
-import CharacterData, {getDerivedStats, addWeapon, removeWeapon, addSkill, removeSkill} from "../models/characterData.js";
+import CharacterData, {getDerivedStats, getDerivedSkill, addWeapon, removeWeapon, addSkill, removeSkill} from "../models/characterData.js";
 import {CHARACTER_CLASS, CHARACTER_SUBCLASS, CHARACTER_LINEAGE, CHARACTER_ATTRIBUTES} from "../models/sopData.js";
 
 import OBR from "@owlbear-rodeo/sdk";
@@ -51,15 +51,25 @@ export default class CharacterController extends AbstractController{
 
         document.addEventListener("focusout", (event) => {
             const modelKey = event.target.dataset.character;
+            let value = event.target.value;
+
             if (modelKey && modelKey in CharacterData) {
-                let value = event.target.value;
-                
+
                 if (event.target.hasAttribute("calc-field")) {
                     value = this.calculateMathExpression(value);
                     event.target.value = value; // Update the input with the calculated value
                 }
 
                 CharacterData[modelKey] = value;
+            }
+
+            if (event.target.hasAttribute("data-character-skill")){
+                const skillName = event.target.getAttribute("data-character-skill");
+                const derivedSkill = getDerivedSkill(skillName);      
+                if (derivedSkill){
+                    CharacterData[skillName] = derivedSkill > value ? derivedSkill : value;
+                    event.target.value = CharacterData[skillName];
+                }
             }
         });
 
@@ -220,6 +230,7 @@ export default class CharacterController extends AbstractController{
 
         container.appendChild(newSkill);
 
+        updateSkillInputField();
 
         function recalculateSkillResults(){
             const rank = parseInt(newSkill.querySelector('input[name="rank"]').value) || 0;
@@ -228,6 +239,19 @@ export default class CharacterController extends AbstractController{
             
             newSkill.skillData.value = rank + (Number(CharacterData[attribute]) || 0);
             resultLabel.textContent = newSkill.skillData.value;
+
+            updateSkillInputField();
+        }
+
+        function updateSkillInputField(){
+            const derivedSkill = getDerivedSkill(newSkill.skillData.name);
+
+            if (derivedSkill)
+                CharacterData[newSkill.skillData.name] = derivedSkill;
+
+            document.querySelectorAll(`input[data-character-skill="${newSkill.skillData.name}"]`).forEach((input)=>{
+                input.value = derivedSkill ? derivedSkill : newSkill.skillData.value;
+            });
         }
     }
 
