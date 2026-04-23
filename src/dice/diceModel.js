@@ -2,14 +2,14 @@ import * as THREE from 'three';
 import RAPIER from '@dimforge/rapier3d-compat';
 
 // A simple utility to generate a canvas texture with a number
-function createDiceTexture(number) {
+function createDiceTexture(number, bgColor, textColor) {
     const canvas = document.createElement('canvas');
     canvas.width = 256;
     canvas.height = 256;
     const ctx = canvas.getContext('2d');
 
     // Background
-    ctx.fillStyle = '#ffffff';
+    ctx.fillStyle = bgColor;
     ctx.fillRect(0, 0, 256, 256);
 
     // Border
@@ -18,7 +18,7 @@ function createDiceTexture(number) {
     ctx.strokeRect(5, 5, 246, 246);
 
     // Number
-    ctx.fillStyle = '#000000';
+    ctx.fillStyle = textColor;
     ctx.font = 'bold 120px sans-serif';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
@@ -28,15 +28,30 @@ function createDiceTexture(number) {
     return new THREE.MeshStandardMaterial({ map: texture, roughness: 0.2, metalness: 0.1 });
 }
 
-// Generate materials for faces 1-6
-const diceMaterials = [
-    createDiceTexture(1), // right
-    createDiceTexture(6), // left
-    createDiceTexture(2), // top
-    createDiceTexture(5), // bottom
-    createDiceTexture(3), // front
-    createDiceTexture(4), // back
-];
+function generateDiceTexture(color){
+    let diceSettings = { bgColor: '#ffffff', textColor: '#000000'}
+    switch (color){
+        case 'red':
+            diceSettings.bgColor = '#b10000';
+            diceSettings.textColor = '#ffffff';
+            break;
+        case 'black':
+            diceSettings.bgColor = '#000000';
+            diceSettings.textColor = '#ffffff';
+            break;
+    }
+
+    let texture = [
+        createDiceTexture(1, diceSettings.bgColor, diceSettings.textColor), // right
+        createDiceTexture(6, diceSettings.bgColor, diceSettings.textColor), // left
+        createDiceTexture(2, diceSettings.bgColor, diceSettings.textColor), // top
+        createDiceTexture(5, diceSettings.bgColor, diceSettings.textColor), // bottom
+        createDiceTexture(3, diceSettings.bgColor, diceSettings.textColor), // front
+        createDiceTexture(4, diceSettings.bgColor, diceSettings.textColor), // back
+    ];
+
+    return texture;
+}
 
 // Mapping materials specific to standard D6 
 // In BoxGeometry, faces are corresponding directly: +x, -x, +y, -y, +z, -z
@@ -51,12 +66,13 @@ const FACE_NORMALS = [
 ];
 
 export class DiceModel {
-    constructor(scene, world, size = 1.0) {
+    constructor(scene, world, color = 'white', size = 1.0) {
         this.size = size;
+        this.color = color;
 
         // --- Visuals (Three.js) ---
         const geometry = new THREE.BoxGeometry(size, size, size);
-        this.mesh = new THREE.Mesh(geometry, diceMaterials);
+        this.mesh = new THREE.Mesh(geometry, generateDiceTexture(color));
         // Start high up to drop
         this.mesh.position.set(0, 10, 0);
         this.mesh.castShadow = true;
@@ -150,6 +166,24 @@ export class DiceModel {
              }
         }
         return bestFace;
+    }
+
+    getSuccess(){
+        const diceFace = this.getTopFace();
+        let result = false;
+        switch(this.color){
+            case 'red':
+                result = diceFace > 2;
+                break;
+            case 'black':
+                result = diceFace > 1;
+                break;
+            default:
+                result = diceFace > 3;
+                break;
+        }
+
+        return result;
     }
 
     destroy(scene, world) {

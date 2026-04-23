@@ -3,6 +3,7 @@ import RAPIER from '@dimforge/rapier3d-compat';
 import { DiceModel } from './diceModel.js';
 
 import OBR from '@owlbear-rodeo/sdk';
+import { color } from 'three/tsl';
 
 let scene, camera, renderer;
 let world;
@@ -40,10 +41,10 @@ const OBRinitPromise = new Promise((resolve)=>{
         container.appendChild(renderer.domElement);
 
         // Setup lighting
-        const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+        const ambientLight = new THREE.AmbientLight(0xffffff, 1);
         scene.add(ambientLight);
 
-        const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+        const directionalLight = new THREE.DirectionalLight(0xffffff, 2);
         directionalLight.position.set(10, 30, -10);
         directionalLight.castShadow = true;
 
@@ -145,12 +146,12 @@ function startRenderLoop() {
     _loop();
 }
 
-export function addDiceToTray() {
+export function addDiceToTray(diceColor) {
     if (!world || !scene) {
         console.warn("Dice tray not fully initialized yet.");
         return null;
     }
-    const dice = new DiceModel(scene, world);
+    const dice = new DiceModel(scene, world, diceColor);
     diceList.push(dice);
     return dice;
 }

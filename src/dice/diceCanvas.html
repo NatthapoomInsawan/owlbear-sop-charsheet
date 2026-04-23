@@ -24,10 +24,12 @@
       async function initSystem(){
         const urlParams = new URLSearchParams(window.location.search);
         const diceCount = parseInt(urlParams.get('diceCount')) || 0;
+        const diceColor = urlParams.get('diceColor');
 
-        const results = await simulateDiceRoll(diceCount);
+        const results = await simulateDiceRoll(diceCount, diceColor);
+
         console.log("Roll results:", results);
-        OBR.notification.show(`Rolled 3D6: ${results.join(", ")} (Total: ${results.reduce((a, b) => a + b, 0)})`);
+        OBR.notification.show(`Rolled ${results.count}D6: (${results.faces.join(", ")}) Success: ${results.success.reduce((a, b) => a + b, 0)} [${results.diceColor.toUpperCase()}]`);
       }
 
       await initSystem();

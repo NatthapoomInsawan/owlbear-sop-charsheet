@@ -7,10 +7,10 @@ import OBR from "@owlbear-rodeo/sdk";
  * @param {number} count Number of D6 to roll
  * @returns {Promise<number[]>} Array of face values
  */
-export async function rollD6Pool(count) {
+export async function rollD6Pool(count, color = 'white') {
     await OBR.modal.open({
         id: "roll-popover",
-        url: `/src/dice/diceCanvas.html?diceCount=${count}`,
+        url: `/src/dice/diceCanvas.html?diceCount=${count}&diceColor=${color}`,
         fullScreen: true,
         hideBackdrop: true,
         hidePaper: true,
@@ -18,7 +18,7 @@ export async function rollD6Pool(count) {
     });
 }
 
-export async function simulateDiceRoll(diceCount){
+export async function simulateDiceRoll(diceCount, diceColor){
 
     await initDiceTray();
 
@@ -36,7 +36,7 @@ export async function simulateDiceRoll(diceCount){
 
     // Spawn and throw requested amount of dice
     for (let i = 0; i < diceCount ; i++) {
-        const dice = addDiceToTray();
+        const dice = addDiceToTray(diceColor);
         if (dice) {
             dice.throw();
             activeDice.push(dice);
@@ -58,7 +58,12 @@ export async function simulateDiceRoll(diceCount){
                 clearInterval(checkAsleep);
                 
                 // Read faces
-                const results = activeDice.map(d => d.getTopFace());
+                const results = {
+                    count: diceCount,
+                    faces: activeDice.map(d => d.getTopFace()), 
+                    success: activeDice.map(d => d.getSuccess()),
+                    diceColor: diceColor
+                }
                 resolve(results);
             }
         }, 100);
