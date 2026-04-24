@@ -1,0 +1,115 @@
+import { rollD6Pool } from "../dice/diceController.js";
+
+const template = document.createElement('template');
+template.innerHTML = /*html*/`
+    <style>
+        :host { 
+            position: fixed; 
+            bottom: 20px; 
+            right: 20px; 
+            z-index: 9999; 
+        }
+
+        #roll-canvas-button { 
+            width: 60px; 
+            height: 60px; 
+            border-radius: 50%; 
+            border: none; 
+            background-color: rgba(51, 51, 51, 0.85);
+            backdrop-filter: blur(5px); 
+            color: white; 
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3); 
+            font-size: 24px;
+            position: relative;
+            z-index: 2;
+        }
+
+        #roll-canvas-button:hover {
+            background-color: var(--accent);
+        }
+
+        #dice-canvas-container {
+            display: none;
+            position: absolute;
+            bottom: 80px; 
+            right: 0;
+            width: 150px;
+            padding: 15px;
+            flex-direction: column;
+            gap: 10px;
+            
+            background-color: rgba(51, 51, 51, 0.85);
+            backdrop-filter: blur(5px); 
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            
+            z-index: 1;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        #dice-canvas-container.visible { 
+            display: flex; 
+            opacity: 1; 
+        }
+
+        #dice-count-input {
+            font-size: 18px;
+            padding: 5px;
+            width: 100%;
+            box-sizing: border-box;
+            text-align: center;
+        }
+
+    </style>
+    <div id="dice-canvas-container">
+        <label>DICE COUNT</label>
+        <input id = "dice-count-input" type = "number" min = "1" value = "1">
+        <button id="roll-action-button">ROLL!</button>
+    </div>
+    <button id="roll-canvas-button">🎲</button>
+`;
+
+
+class DiceRoller extends HTMLElement {
+  constructor() {
+    super();
+    this.attachShadow({ mode: 'open' });
+    this.shadowRoot.appendChild(template.content.cloneNode(true));
+    this.onChildReorder = null;
+  }
+
+  connectedCallback() {
+    const canvasButton = this.shadowRoot.querySelector('#roll-canvas-button');
+    const container = this.shadowRoot.querySelector('#dice-canvas-container');
+    const rollBtn = this.shadowRoot.querySelector('#roll-action-button');
+    const diceCountInput = this.shadowRoot.querySelector('#dice-count-input');
+
+    canvasButton.addEventListener('click', () => {
+        container.classList.toggle('visible');
+    });
+
+    rollBtn.addEventListener('click', () => {
+        const count = parseInt(diceCountInput.value);
+        rollD6Pool(count);
+        container.classList.remove('visible');
+    });
+
+    diceCountInput.addEventListener('blur', () =>{
+        let value = parseInt(diceCountInput.value);
+        diceCountInput.value = (value > 0) ? value : 1;
+    });
+  }
+
+  openRollPanel(diceCount) {
+    const container = this.shadowRoot.querySelector('#dice-canvas-container');
+    const diceCountInput = this.shadowRoot.querySelector('#dice-count-input');
+    diceCountInput.value = parseInt(diceCount);
+    container.classList.add('visible');
+  }
+}
+
+customElements.define('dice-roller', DiceRoller);

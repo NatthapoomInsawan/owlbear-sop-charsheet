@@ -5,6 +5,7 @@ import heroImg from "./assets/hero.png";
 import { route } from "./router";
 
 import "./components/dragableRemover.js";
+import "./components/diceRoller.js";
 
 document.querySelector("#app").innerHTML = /*html*/ `
 <section>
@@ -13,6 +14,7 @@ document.querySelector("#app").innerHTML = /*html*/ `
     </div>
 </section>
 <section id="center">
+  <dice-roller></dice-roller>
   <div class="hero">
     <img src="${heroImg}" class="base" width="170" height="179">
     <img src="${javascriptLogo}" class="framework" alt="JavaScript logo"/>

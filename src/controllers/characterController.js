@@ -3,7 +3,6 @@ import CharacterData, {getDerivedStats, getDerivedSkill, addWeapon, removeWeapon
 import {CHARACTER_CLASS, CHARACTER_SUBCLASS, CHARACTER_LINEAGE, CHARACTER_ATTRIBUTES} from "../models/sopData.js";
 
 import OBR from "@owlbear-rodeo/sdk";
-import { rollD6Pool } from "../dice/diceController.js";
 
 export default class CharacterController extends AbstractController{
     constructor() {
@@ -83,7 +82,7 @@ export default class CharacterController extends AbstractController{
 
         document.getElementById("test-dice-btn")?.addEventListener("click", async () => {
             console.log("Rolling 3D6...");
-            await rollD6Pool(3);
+            document.querySelector('dice-roller').openRollPanel(3);
         });
 
         this.bindContainerReordering(".character-weapons dragable-container", "weapon");
