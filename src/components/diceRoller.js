@@ -1,5 +1,7 @@
 import { rollD6Pool } from "../dice/diceController.js";
 
+import './selectToggle.js';
+
 const template = document.createElement('template');
 template.innerHTML = /*html*/`
     <style>
@@ -34,7 +36,7 @@ template.innerHTML = /*html*/`
             position: absolute;
             bottom: 80px; 
             right: 0;
-            width: 150px;
+            width: auto;
             padding: 15px;
             flex-direction: column;
             gap: 10px;
@@ -64,11 +66,26 @@ template.innerHTML = /*html*/`
             text-align: center;
         }
 
+        .dice-canvas-container button {
+            cursor: pointer;
+        }
+
+        .toggle-group {
+            display: flex;
+            justify-content: space-between;
+            gap: 5px;
+        }
+
     </style>
     <div class="dice-canvas-container">
         <label>DICE COUNT</label>
         <input type = "number" min = "1" value = "1">
         <button>ROLL!</button>
+        <div class ="toggle-group">
+            <select-toggle is-selected = "true">WHITE</select-toggle>
+            <select-toggle>RED</select-toggle>
+            <select-toggle>BLACK</select-toggle>
+        </div>
         
     </div>
     <button id="roll-canvas-button">🎲</button>
@@ -80,7 +97,6 @@ class DiceRoller extends HTMLElement {
     super();
     this.attachShadow({ mode: 'open' });
     this.shadowRoot.appendChild(template.content.cloneNode(true));
-    this.onChildReorder = null;
   }
 
   connectedCallback() {
