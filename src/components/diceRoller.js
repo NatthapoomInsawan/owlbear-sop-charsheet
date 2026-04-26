@@ -29,7 +29,7 @@ template.innerHTML = /*html*/`
             background-color: var(--accent);
         }
 
-        #dice-canvas-container {
+        .dice-canvas-container {
             display: none;
             position: absolute;
             bottom: 80px; 
@@ -51,12 +51,12 @@ template.innerHTML = /*html*/`
             transition: opacity 0.5s ease;
         }
 
-        #dice-canvas-container.visible { 
+        .dice-canvas-container.visible { 
             display: flex; 
             opacity: 1; 
         }
 
-        #dice-count-input {
+        .dice-canvas-container input {
             font-size: 18px;
             padding: 5px;
             width: 100%;
@@ -65,10 +65,11 @@ template.innerHTML = /*html*/`
         }
 
     </style>
-    <div id="dice-canvas-container">
+    <div class="dice-canvas-container">
         <label>DICE COUNT</label>
-        <input id = "dice-count-input" type = "number" min = "1" value = "1">
-        <button id="roll-action-button">ROLL!</button>
+        <input type = "number" min = "1" value = "1">
+        <button>ROLL!</button>
+        
     </div>
     <button id="roll-canvas-button">🎲</button>
 `;
@@ -84,9 +85,9 @@ class DiceRoller extends HTMLElement {
 
   connectedCallback() {
     const canvasButton = this.shadowRoot.querySelector('#roll-canvas-button');
-    const container = this.shadowRoot.querySelector('#dice-canvas-container');
-    const rollBtn = this.shadowRoot.querySelector('#roll-action-button');
-    const diceCountInput = this.shadowRoot.querySelector('#dice-count-input');
+    const container = this.shadowRoot.querySelector('.dice-canvas-container');
+    const rollBtn = this.shadowRoot.querySelector('.dice-canvas-container button');
+    const diceCountInput = this.shadowRoot.querySelector('.dice-canvas-container input');
 
     canvasButton.addEventListener('click', () => {
         container.classList.toggle('visible');
@@ -105,8 +106,8 @@ class DiceRoller extends HTMLElement {
   }
 
   openRollPanel(diceCount) {
-    const container = this.shadowRoot.querySelector('#dice-canvas-container');
-    const diceCountInput = this.shadowRoot.querySelector('#dice-count-input');
+    const container = this.shadowRoot.querySelector('.dice-canvas-container');
+    const diceCountInput = this.shadowRoot.querySelector('.dice-canvas-container input');
     diceCountInput.value = parseInt(diceCount);
     container.classList.add('visible');
   }
