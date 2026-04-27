@@ -6,6 +6,8 @@ import { route } from "./router";
 
 import "./components/dragableRemover.js";
 import "./components/diceRoller.js";
+import "./components/toggleGroup.js";
+import "./components/selectToggle.js";
 
 document.querySelector("#app").innerHTML = /*html*/ `
 <section>
@@ -21,12 +23,12 @@ document.querySelector("#app").innerHTML = /*html*/ `
     <img src=${viteLogo} class="vite" alt="Vite logo" />
   </div>
   <div class= "nav-menu">
-    <nav>
-      <a href="/" data-link>character</a> |
-      <a href="/equipment" data-link>equipment</a> |
-      <a href="/special-trait" data-link>special trait</a> |
-      <a href="/spell" data-link>spell</a>
-    </nav>
+    <toggle-group class="toggle-group" limit-select="1">
+      <select-toggle href="/" data-link is-selected = "true">Character</select-toggle>
+      <select-toggle href="/equipment" data-link>Equipment</select-toggle>
+      <select-toggle href="/special-trait" data-link>Special Trait</select-toggle>
+      <select-toggle href="/spell" data-link>Spell</select-toggle>
+    </toggle-group>
   </div>
   <div id="content">
   </div>

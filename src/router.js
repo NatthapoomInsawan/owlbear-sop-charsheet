@@ -48,8 +48,7 @@ window.addEventListener("popstate", findMatchView);
 document.addEventListener("DOMContentLoaded", ()=>{
     document.addEventListener("click", (event) =>{
         if (event.target.matches("[data-link]")){
-            event.preventDefault();
-            route(event.target.href);
+            route(event.target.getAttribute("href"));
         }
     });
     route();

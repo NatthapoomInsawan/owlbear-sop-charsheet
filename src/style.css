@@ -294,6 +294,7 @@ code {
     border-right-color: var(--border);
   }
 }
+
 #dice-canvas-container {
   position: fixed;
   top: 50%;
@@ -303,4 +304,26 @@ code {
   height: 500px;
   pointer-events: none; /* Let clicks pass through to character sheet */
   z-index: 9999; /* Display on top */
+}
+
+.nav-menu {
+  display: flex;
+  justify-content: center;
+  padding: 10px 0px;
+  border-bottom: 2px solid var(--border);
+  width: 100%;
+}
+
+.nav-menu toggle-group {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  height: auto;
+  gap: 10px;
+}
+
+.nav-menu select-toggle {
+  flex: 1;
+  color: white;
+  display: block;
 }

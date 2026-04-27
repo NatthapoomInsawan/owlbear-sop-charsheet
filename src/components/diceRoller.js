@@ -1,6 +1,7 @@
 import { rollD6Pool } from "../dice/diceController.js";
 
 import './selectToggle.js';
+import './toggleGroup.js';
 
 const template = document.createElement('template');
 template.innerHTML = /*html*/`
@@ -80,12 +81,12 @@ template.innerHTML = /*html*/`
     <div class="dice-canvas-container">
         <label>DICE COUNT</label>
         <input type = "number" min = "1" value = "1">
+        <toggle-group class ="toggle-group" limit-select = "1">
+            <select-toggle name = "white" is-selected = "true">WHITE</select-toggle>
+            <select-toggle name = "red">RED</select-toggle>
+            <select-toggle name = "black">BLACK</select-toggle>
+        </toggle-group>
         <button>ROLL!</button>
-        <div class ="toggle-group">
-            <select-toggle is-selected = "true">WHITE</select-toggle>
-            <select-toggle>RED</select-toggle>
-            <select-toggle>BLACK</select-toggle>
-        </div>
         
     </div>
     <button id="roll-canvas-button">🎲</button>
@@ -111,7 +112,9 @@ class DiceRoller extends HTMLElement {
 
     rollBtn.addEventListener('click', () => {
         const count = parseInt(diceCountInput.value);
-        rollD6Pool(count);
+        const selectedColor = this.shadowRoot.querySelector('toggle-group')?.selectedToggles[0]?.getAttribute('name') || 'white';
+
+        rollD6Pool(count, selectedColor);
         container.classList.remove('visible');
     });
 
