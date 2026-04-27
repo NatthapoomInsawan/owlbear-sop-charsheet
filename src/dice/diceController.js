@@ -8,13 +8,16 @@ import OBR from "@owlbear-rodeo/sdk";
  * @returns {Promise<number[]>} Array of face values
  */
 export async function rollD6Pool(count, color = 'white') {
-    await OBR.modal.open({
-        id: "roll-popover",
-        url: `/src/dice/diceCanvas.html?diceCount=${count}&diceColor=${color}`,
-        fullScreen: true,
-        hideBackdrop: true,
-        hidePaper: true,
-        disablePointerEvents: true,
+
+    OBR.onReady(async () => {
+            await OBR.modal.open({
+            id: "roll-popover",
+            url: `/src/dice/diceCanvas.html?diceCount=${count}&diceColor=${color}`,
+            fullScreen: true,
+            hideBackdrop: true,
+            hidePaper: true,
+            disablePointerEvents: true,
+        });
     });
 }
 
