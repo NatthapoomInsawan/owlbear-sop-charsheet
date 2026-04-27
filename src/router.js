@@ -38,6 +38,10 @@ const findMatchView = async () =>{
     let view = new match.route.view();
     let controller = new match.route.controller();
 
+    document.querySelectorAll("select-toggle[data-link]")?.forEach(toggle => {
+        toggle.selected = toggle.getAttribute("href") === match.route.path;
+    });
+
     document.querySelector("#content").innerHTML = await view.getHtml();
     
     controller.init();
