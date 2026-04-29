@@ -80,9 +80,12 @@ export default class CharacterController extends AbstractController{
             this.createSkill();
         });
 
-        document.getElementById("test-dice-btn")?.addEventListener("click", async () => {
-            console.log("Rolling 3D6...");
-            document.querySelector('dice-roller').openRollPanel(3);
+        document.querySelectorAll(".rollable-click input[type='number']").forEach(input => {
+            input.parentElement.addEventListener("click", () => {
+                if (input === document.activeElement) return;
+                const currentValue = parseInt(input.value) || 0;
+                document.querySelector('dice-roller').openRollPanel(currentValue > 0 ? currentValue : 1);
+            });
         });
 
         this.bindContainerReordering(".character-weapons dragable-container", "weapon");
@@ -199,7 +202,7 @@ export default class CharacterController extends AbstractController{
                 ${CHARACTER_ATTRIBUTES.map(attribute => `<option value="${attribute}" ${attribute === skillData.attribute ? "selected" : ""}>${attribute}</option>`).join("")}
             </select>
             <input name="rank" placeholder="rank" type="number" min="0" value="${skillData.rank}">
-            <label name="result">${skillData.value}</label>
+            <button name="result">${skillData.value}</button>
         `;
 
         newSkill.querySelectorAll('input').forEach(input => {
@@ -210,6 +213,19 @@ export default class CharacterController extends AbstractController{
                     skillData[inputName] = event.target.type === "number" ? parseInt(event.target.value) || 0 : event.target.value;
                 recalculateSkillResults();
             });
+        });
+
+        const selectButton = newSkill.querySelector('button[name="result"]');
+        selectButton.addEventListener("click", () => {
+            const result = newSkill.skillData.value || 1;
+            document.querySelector('dice-roller').openRollPanel(result);
+        });
+
+        selectButton.addEventListener("mouseover", () => {
+            selectButton.textContent = `ROLL`;
+        });
+        selectButton.addEventListener("mouseout", () => {
+            selectButton.textContent = newSkill.skillData.value;
         });
 
         newSkill.querySelector('select[name="attribute"]').addEventListener("change", (event) => {
@@ -234,10 +250,10 @@ export default class CharacterController extends AbstractController{
         function recalculateSkillResults(){
             const rank = parseInt(newSkill.querySelector('input[name="rank"]').value) || 0;
             const attribute = newSkill.querySelector('select[name="attribute"]').value;
-            const resultLabel = newSkill.querySelector('label[name="result"]');
+            const resultButton = newSkill.querySelector('button[name="result"]');
             
             newSkill.skillData.value = rank + (Number(CharacterData[attribute]) || 0);
-            resultLabel.textContent = newSkill.skillData.value;
+            resultButton.textContent = newSkill.skillData.value;
 
             updateSkillInputField();
         }

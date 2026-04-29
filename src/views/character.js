@@ -13,9 +13,8 @@ export default class Character extends AbstractView {
 
     async getHtml() {
         return /*html*/`
-        <div style="display: flex; justify-content: space-between; align-items: center;">
+        <div class = "character-header">
             <h1>Character</h1>
-            <button id="test-dice-btn" style="padding: 5px 10px; cursor: pointer;">Test 3D6 Roll</button>
         </div>
         <div class = "character-info">
             <label>CHARACTER <input placeholder = "name" data-character = "characterName"></label>
@@ -28,18 +27,18 @@ export default class Character extends AbstractView {
         <div class = "character-stats">
             <div class = "character-attributes">
                 <h3>ATTRIBUTES</h3>
-                <label>MIGHT <input type = "number" step = "1" min = "1" max = "4" placeholder = "might" data-character = "might" character-attribute = "might"></label>
-                <label>TOUGHNESS <input type = "number" step = "1" min = "1" max = "4" placeholder = "toughness" data-character = "toughness" character-attribute = "toughness"></label>
-                <label>AGILITY <input type = "number" step = "1" min = "1" max = "4" placeholder = "agility" data-character = "agility" character-attribute = "agility"></label>
-                <label>WILLPOWER <input type = "number" step = "1" min = "1" max = "4" placeholder = "willpower" data-character = "willpower" character-attribute = "willpower"></label>
-                <label>INTELLIGENCE <input type = "number" step = "1" min = "1" max = "4" placeholder = "intelligence" data-character = "intelligence" character-attribute = "intelligence"></label>
-                <label>FATE <input type = "number" step = "1" min = "1" max = "4" placeholder = "fate" data-character = "fate" character-attribute = "fate"></label>
+                <label class = "rollable-click">MIGHT <input type = "number" step = "1" min = "1" max = "4" placeholder = "might" data-character = "might" character-attribute = "might"></label>
+                <label class = "rollable-click">TOUGHNESS <input type = "number" step = "1" min = "1" max = "4" placeholder = "toughness" data-character = "toughness" character-attribute = "toughness"></label>
+                <label class = "rollable-click">AGILITY <input type = "number" step = "1" min = "1" max = "4" placeholder = "agility" data-character = "agility" character-attribute = "agility"></label>
+                <label class = "rollable-click">WILLPOWER <input type = "number" step = "1" min = "1" max = "4" placeholder = "willpower" data-character = "willpower" character-attribute = "willpower"></label>
+                <label class = "rollable-click">INTELLIGENCE <input type = "number" step = "1" min = "1" max = "4" placeholder = "intelligence" data-character = "intelligence" character-attribute = "intelligence"></label>
+                <label class = "rollable-click">FATE <input type = "number" step = "1" min = "1" max = "4" placeholder = "fate" data-character = "fate" character-attribute = "fate"></label>
             </div>
             <div class = "character-derived-fields">
-                <label>GRIT <input type = "number" step = "1" min = "0" placeholder = "grit" data-character = "grit" data-character-skill = "grit"></label>
-                <label>INIT <input type = "number" step = "1" min = "0" placeholder = "initiative" data-character = "initiative"></label>
-                <label>LUCK <input type = "number" step = "1" min = "0" placeholder = "luck" data-character = "luck"></label>
-                <label>ARMOR <input type = "number" step = "1" min = "0" placeholder = "armor" data-character = "armor"></label>
+                <label class = "rollable-click">GRIT <input type = "number" step = "1" min = "0" placeholder = "grit" data-character = "grit" data-character-skill = "grit"></label>
+                <label class = "rollable-click">INIT <input type = "number" step = "1" min = "0" placeholder = "initiative" data-character = "initiative"></label>
+                <label class = "rollable-click">LUCK <input type = "number" step = "1" min = "0" placeholder = "luck" data-character = "luck"></label>
+                <label class = "rollable-click">ARMOR <input type = "number" step = "1" min = "0" placeholder = "armor" data-character = "armor"></label>
             </div>
         </div>
         <div class = "character-weapons">

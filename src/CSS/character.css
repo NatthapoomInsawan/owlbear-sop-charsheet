@@ -223,3 +223,11 @@
   flex: 1; 
   min-width: 0;
 }
+
+.rollable-click {
+  cursor: pointer;
+}
+
+.rollable-click:hover {
+  color: var(--accent);
+}
