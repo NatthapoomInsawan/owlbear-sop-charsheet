@@ -68,7 +68,16 @@ template.innerHTML = /*html*/`
         }
 
         .dice-canvas-container button {
+            padding: 8px 8px;
+            border-radius: 6px;
+            border: none;
+            color: white;
             cursor: pointer;
+            font-size: 16px;
+
+             &:hover {
+                background-color: var(--accent);
+            }
         }
 
         .toggle-group {
@@ -80,7 +89,7 @@ template.innerHTML = /*html*/`
     </style>
     <div class="dice-canvas-container">
         <label>DICE COUNT</label>
-        <input type = "number" min = "1" value = "1">
+        <input name = "dice-count" type = "number" min = "1" value = "1">
         <toggle-group class ="toggle-group" limit-select = "1">
             <select-toggle name = "white" is-selected = "true">WHITE</select-toggle>
             <select-toggle name = "red">RED</select-toggle>
@@ -122,13 +131,21 @@ class DiceRoller extends HTMLElement {
         let value = parseInt(diceCountInput.value);
         diceCountInput.value = (value > 0) ? value : 1;
     });
+
+    window.addEventListener('click', (e) => {
+        if (!container.contains(e.target) && e.target !== this && container.classList.contains('visible')) {
+            container.classList.remove('visible');
+        }
+    });
   }
 
   openRollPanel(diceCount) {
     const container = this.shadowRoot.querySelector('.dice-canvas-container');
     const diceCountInput = this.shadowRoot.querySelector('.dice-canvas-container input');
     diceCountInput.value = parseInt(diceCount);
-    container.classList.add('visible');
+    requestAnimationFrame(() => {
+        container.classList.add('visible');
+    });
   }
 }
 
